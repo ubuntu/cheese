@@ -1,5 +1,8 @@
 name: cheese
 adopt-info: cheese
+# Temporary manual setting version number 
+# https://gitlab.gnome.org/GNOME/cheese/-/merge_requests/60
+version: '41.1'
 grade: stable # must be 'stable' to release into candidate/stable channels
 confinement: strict
 base: core20
