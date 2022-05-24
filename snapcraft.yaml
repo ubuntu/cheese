@@ -23,6 +23,8 @@ apps:
       - audio-playback
       - camera
       - home
+    environment:
+      DISABLE_WAYLAND: 'true'
 
 parts:
   cheese:
