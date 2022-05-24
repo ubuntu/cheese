@@ -1,6 +1,6 @@
 name: cheese
 adopt-info: cheese
-# Temporary manual setting version number 
+# Temporary manual setting version number
 # https://gitlab.gnome.org/GNOME/cheese/-/merge_requests/60
 version: '41.1'
 grade: stable # must be 'stable' to release into candidate/stable channels
@@ -51,3 +51,20 @@ parts:
     stage-packages:
     - gnome-video-effects
     - libclutter-gst-3.0-0
+
+  libraries:
+    plugin: nil
+    prime:
+      - "-*"
+
+  # Find files provided by the base and platform snap and ensure they aren't
+  # duplicated in this snap
+  cleanup:
+    after: [libraries]
+    plugin: nil
+    build-snaps: [core20, gtk-common-themes, gnome-3-38-2004]
+    override-prime: |
+      set -eux
+      for snap in "core20" "gtk-common-themes" "gnome-3-38-2004"; do
+        cd "/snap/$snap/current" && find . -type f,l -name *.so.* -exec rm -f "$SNAPCRAFT_PRIME/{}" \;
+      done
