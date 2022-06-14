@@ -14,6 +14,13 @@ slots:
     bus: session
     name: org.gnome.Cheese
 
+plugs:
+  # for the image switcher at the bottom of cheese
+  personal-thumbnail-cache:
+    interface: personal-files
+    write:
+    - $HOME/.cache/thumbnails
+
 apps:
   cheese:
     extensions: [ gnome-3-38 ]
@@ -23,6 +30,7 @@ apps:
       - audio-playback
       - camera
       - home
+      - personal-thumbnail-cache
     environment:
       DISABLE_WAYLAND: 'true'
 
