@@ -27,7 +27,31 @@ apps:
       DISABLE_WAYLAND: 'true'
 
 parts:
+  gnome-desktop:
+    source: https://gitlab.gnome.org/GNOME/gnome-desktop.git
+    source-branch: 'gnome-42'
+    source-depth: 1
+    plugin: meson
+    # workaround for thumbnailer being in a different directory in the snap env
+    override-build: |
+      snapcraftctl build
+      sed -i 's#/usr/bin/##' $SNAPCRAFT_PART_INSTALL/usr/share/thumbnailers/gdk-pixbuf-thumbnailer.thumbnailer
+    meson-parameters:
+     - --prefix=/usr
+     - --buildtype=release
+     - -Dbuild_gtk4=false
+    build-packages:
+      - iso-codes
+      - itstool
+      - libseccomp-dev
+      - libudev-dev
+      - xkb-data
+      - yelp-tools
+    stage-packages:
+    - libgdk-pixbuf2.0-bin
+
   cheese:
+    after: [ gnome-desktop ]
     source: https://gitlab.gnome.org/GNOME/cheese.git
     source-type: git
     source-tag: '41.1'
