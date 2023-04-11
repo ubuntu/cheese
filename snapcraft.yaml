@@ -2,7 +2,7 @@ name: cheese
 adopt-info: cheese
 # Temporary manual setting version number
 # https://gitlab.gnome.org/GNOME/cheese/-/merge_requests/60
-version: '41.1'
+version: '44.0'
 grade: stable # must be 'stable' to release into candidate/stable channels
 confinement: strict
 base: core20
@@ -54,7 +54,7 @@ parts:
     after: [ gnome-desktop ]
     source: https://gitlab.gnome.org/GNOME/cheese.git
     source-type: git
-    source-tag: '41.1'
+    source-tag: '44.0'
     parse-info: [usr/share/metainfo/org.gnome.Cheese.appdata.xml]
     override-build: |
       sed -i.bak -e 's|=org.gnome.Cheese$|=${SNAP}/meta/gui/org.gnome.Cheese.svg|g' $SNAPCRAFT_PART_SRC/data/org.gnome.Cheese.desktop.in
