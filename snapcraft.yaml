@@ -5,7 +5,7 @@ adopt-info: cheese
 version: '44.0'
 grade: stable # must be 'stable' to release into candidate/stable channels
 confinement: strict
-base: core20
+base: core22
 
 slots:
   # for GtkApplication registration
@@ -16,7 +16,7 @@ slots:
 
 apps:
   cheese:
-    extensions: [ gnome-3-38 ]
+    extensions: [ gnome ]
     command: usr/bin/cheese
     desktop: usr/share/applications/org.gnome.Cheese.desktop
     plugs:
@@ -27,48 +27,23 @@ apps:
       DISABLE_WAYLAND: 'true'
 
 parts:
-  gnome-desktop:
-    source: https://gitlab.gnome.org/GNOME/gnome-desktop.git
-    source-branch: 'gnome-42'
-    source-depth: 1
-    plugin: meson
-    # workaround for thumbnailer being in a different directory in the snap env
+  cheese:
+    source: https://gitlab.gnome.org/GNOME/cheese.git
+    source-type: git
+    source-tag: '44.0.1'
+    parse-info: [usr/share/metainfo/org.gnome.Cheese.appdata.xml]
     override-build: |
-      snapcraftctl build
-      sed -i 's#/usr/bin/##' $SNAPCRAFT_PART_INSTALL/usr/share/thumbnailers/gdk-pixbuf-thumbnailer.thumbnailer
+      sed -i.bak -e 's|=org.gnome.Cheese$|=${SNAP}/meta/gui/org.gnome.Cheese.svg|g' $CRAFT_PART_SRC/data/org.gnome.Cheese.desktop.in
+      craftctl default
+      mkdir -p $CRAFT_PART_INSTALL/meta/gui/
+      cp $CRAFT_PART_SRC/data/icons/scalable/org.gnome.Cheese.svg $CRAFT_PART_INSTALL/meta/gui/
+      cp data/org.gnome.Cheese.desktop $CRAFT_PART_INSTALL/meta/gui/
+    plugin: meson
     meson-parameters:
      - --prefix=/usr
      - --buildtype=release
-     - -Dbuild_gtk4=false
-    build-packages:
-      - iso-codes
-      - itstool
-      - libseccomp-dev
-      - libudev-dev
-      - xkb-data
-      - yelp-tools
-    stage-packages:
-    - libgdk-pixbuf2.0-bin
-
-  cheese:
-    after: [ gnome-desktop ]
-    source: https://gitlab.gnome.org/GNOME/cheese.git
-    source-type: git
-    source-tag: '44.0'
-    parse-info: [usr/share/metainfo/org.gnome.Cheese.appdata.xml]
-    override-build: |
-      sed -i.bak -e 's|=org.gnome.Cheese$|=${SNAP}/meta/gui/org.gnome.Cheese.svg|g' $SNAPCRAFT_PART_SRC/data/org.gnome.Cheese.desktop.in
-      snapcraftctl build
-      mkdir -p $SNAPCRAFT_PART_INSTALL/meta/gui/
-      cp $SNAPCRAFT_PART_SRC/data/icons/scalable/org.gnome.Cheese.svg $SNAPCRAFT_PART_INSTALL/meta/gui/
-      cp data/org.gnome.Cheese.desktop $SNAPCRAFT_PART_INSTALL/meta/gui/
-    plugin: meson
-    meson-parameters:
-     - --prefix=/usr
      - -Dgtk_doc=false
      - -Dman=false
-    organize:
-      snap/cheese/current/usr: usr
     build-packages:
      - gnome-video-effects-dev
      - libcanberra-gtk3-dev
@@ -88,9 +63,9 @@ parts:
   cleanup:
     after: [libraries]
     plugin: nil
-    build-snaps: [core20, gtk-common-themes, gnome-3-38-2004]
+    build-snaps: [core22, gtk-common-themes, gnome-42-2204]
     override-prime: |
       set -eux
-      for snap in "core20" "gtk-common-themes" "gnome-3-38-2004"; do
-        cd "/snap/$snap/current" && find . -type f,l -name *.so.* -exec rm -f "$SNAPCRAFT_PRIME/{}" \;
+      for snap in "core22" "gtk-common-themes" "gnome-42-2204"; do
+        cd "/snap/$snap/current" && find . -type f,l -name *.so.* -exec rm -f "$CRAFT_PRIME/{}" \;
       done
