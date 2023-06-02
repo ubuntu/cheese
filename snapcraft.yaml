@@ -31,6 +31,7 @@ parts:
     source: https://gitlab.gnome.org/GNOME/cheese.git
     source-type: git
     source-tag: '44.0.1'
+    source-depth: 1
     parse-info: [usr/share/metainfo/org.gnome.Cheese.appdata.xml]
     override-build: |
       sed -i.bak -e 's|=org.gnome.Cheese$|=${SNAP}/meta/gui/org.gnome.Cheese.svg|g' $CRAFT_PART_SRC/data/org.gnome.Cheese.desktop.in
