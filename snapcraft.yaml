@@ -40,7 +40,6 @@ parts:
       craftctl default
       mkdir -p $CRAFT_PART_INSTALL/meta/gui/
       cp $CRAFT_PART_SRC/data/icons/scalable/org.gnome.Cheese.svg $CRAFT_PART_INSTALL/meta/gui/
-      cp data/org.gnome.Cheese.desktop $CRAFT_PART_INSTALL/meta/gui/
     plugin: meson
     meson-parameters:
      - --prefix=/usr
