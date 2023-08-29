@@ -1,8 +1,5 @@
 name: cheese
 adopt-info: cheese
-# Temporary manual setting version number
-# https://gitlab.gnome.org/GNOME/cheese/-/merge_requests/60
-version: '44.0'
 grade: stable # must be 'stable' to release into candidate/stable channels
 confinement: strict
 base: core22
@@ -30,7 +27,10 @@ parts:
   cheese:
     source: https://gitlab.gnome.org/GNOME/cheese.git
     source-type: git
-    source-tag: '44.0.1'
+    source-tag: '44.1'
+# ext:updatesnap
+#   version-format:
+#     lower-than: 45.0
     source-depth: 1
     parse-info: [usr/share/metainfo/org.gnome.Cheese.appdata.xml]
     override-build: |
