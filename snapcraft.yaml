@@ -3,6 +3,8 @@ adopt-info: cheese
 grade: stable # must be 'stable' to release into candidate/stable channels
 confinement: strict
 base: core22
+issues: https://github.com/ubuntu/cheese/issues
+contact: https://github.com/ubuntu/cheese/issues
 
 slots:
   # for GtkApplication registration
