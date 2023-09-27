@@ -51,6 +51,8 @@ parts:
      - libcanberra-gtk3-dev
      - libclutter-gst-3.0-dev
      - libgstreamer-plugins-bad1.0-dev
+     - cmake
+     - libgnome-desktop-3-dev
     stage-packages:
     - gnome-video-effects
     - libclutter-gst-3.0-0
