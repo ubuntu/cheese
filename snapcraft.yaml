@@ -27,12 +27,9 @@ apps:
 
 parts:
   cheese:
-    source: https://gitlab.gnome.org/GNOME/cheese.git
+    source: https://gitlab.gnome.org/Archive/cheese.git
     source-type: git
     source-tag: '44.1'
-# ext:updatesnap
-#   version-format:
-#     lower-than: 46.0
     source-depth: 1
     parse-info: [usr/share/metainfo/org.gnome.Cheese.appdata.xml]
     override-build: |
