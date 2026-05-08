@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "custom-cli"
+version = "1.0.0"
+description = "Custom CLI — note-taking app with markdown, tags, search, and web GUI"
+requires-python = ">=3.8"
+dependencies = [
+    "flask>=2.3",
+    "python-docx>=0.8.11",
+]
+
+[project.scripts]
+notes = "custom_cli.cli:main"
+notes-gui = "custom_cli.gui:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["custom_cli*"]
+
+[tool.setuptools.package-data]
+"custom_cli" = ["templates/*.html"]

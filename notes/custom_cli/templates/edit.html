@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="d-flex align-items-center gap-3 mb-4">
+  <a href="{{ url_for('view_note', note_id=note.id) if note else '/' }}"
+     class="btn btn-outline-secondary btn-sm">
+    <i class="bi bi-arrow-left"></i>
+  </a>
+  <h4 class="mb-0">{{ 'Edit Note' if note else 'New Note' }}</h4>
+</div>
+
+<form method="post">
+  <div class="mb-3">
+    <label class="form-label text-muted small">Title</label>
+    <input type="text" name="title" class="form-control search-input"
+           value="{{ note.title if note else '' }}" placeholder="Note title…" required autofocus>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label text-muted small">Tags <span style="opacity:.5">(comma-separated)</span></label>
+    <input type="text" name="tags" class="form-control search-input"
+           value="{{ tags_str }}" placeholder="kali, tools, recon…">
+  </div>
+
+  <div class="mb-2 d-flex justify-content-between align-items-center">
+    <label class="form-label text-muted small mb-0">Content <span style="opacity:.5">(Markdown)</span></label>
+    <div class="btn-group btn-group-sm" role="group">
+      <button type="button" class="btn btn-outline-secondary active" id="btn-write" onclick="toggleMode('write')">Write</button>
+      <button type="button" class="btn btn-outline-secondary" id="btn-preview" onclick="toggleMode('preview')">Preview</button>
+    </div>
+  </div>
+
+  <div id="write-pane">
+    <textarea name="content" id="editor" class="form-control editor-area w-100"
+              rows="20" placeholder="# My note&#10;&#10;Write **markdown** here…">{{ note.content if note else '' }}</textarea>
+  </div>
+
+  <div id="preview-pane" class="markdown-body p-4"
+       style="background:#161b22;border-radius:10px;border:1px solid #30363d;min-height:300px;line-height:1.7">
+    <div id="preview-content"></div>
+  </div>
+
+  <div class="mt-3 d-flex gap-2">
+    <button type="submit" class="btn btn-primary">
+      <i class="bi bi-floppy"></i> {{ 'Save changes' if note else 'Create note' }}
+    </button>
+    <a href="{{ url_for('view_note', note_id=note.id) if note else '/' }}"
+       class="btn btn-outline-secondary">Cancel</a>
+  </div>
+</form>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+  function toggleMode(mode) {
+    const writePn = document.getElementById('write-pane');
+    const previewPn = document.getElementById('preview-pane');
+    const btnW = document.getElementById('btn-write');
+    const btnP = document.getElementById('btn-preview');
+    if (mode === 'preview') {
+      const content = document.getElementById('editor').value;
+      document.getElementById('preview-content').innerHTML = marked.parse(content);
+      writePn.style.display = 'none';
+      previewPn.style.display = 'block';
+      btnW.classList.remove('active');
+      btnP.classList.add('active');
+    } else {
+      writePn.style.display = 'block';
+      previewPn.style.display = 'none';
+      btnW.classList.add('active');
+      btnP.classList.remove('active');
+    }
+  }
+</script>
+{% endblock %}

@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="d-flex align-items-center justify-content-between mb-4">
+  <h5 class="mb-0" style="color:#8b949e">
+    {% if tag_filter %}
+      Tagged: <span class="tag-badge" style="font-size:.85rem">{{ tag_filter }}</span>
+    {% elif search_q %}
+      Results for <span style="color:#e6edf3">"{{ search_q }}"</span>
+    {% else %}
+      All Notes
+    {% endif %}
+  </h5>
+  <span style="color:#484f58;font-size:.85rem">{{ notes|length }} note(s)</span>
+</div>
+
+{% if notes %}
+  <div class="d-flex flex-column gap-3">
+    {% for note in notes | sort(attribute='updated', reverse=True) %}
+      <div class="note-card p-3">
+        <div class="d-flex justify-content-between align-items-start">
+          <div class="title flex-grow-1">
+            <a href="/note/{{ note.id }}">{{ note.title }}</a>
+            <div class="mt-1 d-flex flex-wrap gap-1">
+              {% for tag in note.tags %}
+                <a href="/?tag={{ tag }}" class="tag-badge">{{ tag }}</a>
+              {% endfor %}
+            </div>
+          </div>
+          <div class="d-flex gap-2 ms-3" style="flex-shrink:0">
+            <a href="/note/{{ note.id }}/edit" class="btn btn-outline-secondary btn-sm py-0 px-2">
+              <i class="bi bi-pencil"></i>
+            </a>
+            <form method="post" action="/note/{{ note.id }}/delete"
+                  onsubmit="return confirm('Delete \'{{ note.title }}\'?')">
+              <button class="btn btn-outline-danger btn-sm py-0 px-2">
+                <i class="bi bi-trash"></i>
+              </button>
+            </form>
+          </div>
+        </div>
+        <div class="mt-2" style="color:#8b949e;font-size:.8rem">
+          <i class="bi bi-clock" style="margin-right:3px"></i>{{ note.updated[:10] }}
+          &nbsp;·&nbsp; #{{ note.id }}
+        </div>
+        {% set snippet = note.content[:200] %}
+        {% if snippet %}
+          <div class="mt-2" style="color:#8b949e;font-size:.82rem;white-space:pre-wrap;overflow:hidden;max-height:3em">{{ snippet }}…</div>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <div class="text-center mt-5" style="color:#484f58">
+    <i class="bi bi-journal" style="font-size:3rem"></i>
+    <p class="mt-3">No notes yet. <a href="/note/new" style="color:#58a6ff">Create one</a> or import a file.</p>
+  </div>
+{% endif %}
+
+{% endblock %}

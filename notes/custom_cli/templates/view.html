@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="d-flex align-items-center gap-3 mb-4">
+  <a href="/" class="btn btn-outline-secondary btn-sm"><i class="bi bi-arrow-left"></i></a>
+  <h4 class="mb-0 flex-grow-1" style="color:#e6edf3">{{ note.title }}</h4>
+  <a href="/note/{{ note.id }}/edit" class="btn btn-outline-secondary btn-sm">
+    <i class="bi bi-pencil"></i> Edit
+  </a>
+  <form method="post" action="/note/{{ note.id }}/delete"
+        onsubmit="return confirm('Delete this note?')">
+    <button class="btn btn-outline-danger btn-sm"><i class="bi bi-trash"></i></button>
+  </form>
+</div>
+
+<!-- Meta -->
+<div class="d-flex flex-wrap gap-2 align-items-center mb-4">
+  {% for tag in note.tags %}
+    <a href="/?tag={{ tag }}" class="tag-badge">{{ tag }}</a>
+  {% endfor %}
+  <span style="color:#484f58;font-size:.8rem;margin-left:auto">
+    Created {{ note.created[:10] }} &nbsp;·&nbsp; Updated {{ note.updated[:10] }}
+  </span>
+</div>
+
+<!-- Rendered markdown -->
+<div class="markdown-body p-4" style="background:#161b22;border-radius:10px;border:1px solid #30363d;line-height:1.7">
+  <div id="md-output"></div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+  const raw = {{ note.content | tojson }};
+  document.getElementById('md-output').innerHTML = marked.parse(raw);
+</script>
+{% endblock %}
